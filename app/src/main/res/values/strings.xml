@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Game for GAS IR</string>
+    <string name="us_map">US map</string>
+    <string name="identify_abbreviation_of_state">IDENTIFY ABBREVIATION OF STATE</string>
+    <string name="identify_state_nickname">IDENTIFY STATE NICKNAME</string>
+    <string name="identify_license_plate_state">IDENTIFY LICENSE PLATE STATE</string>
+    <string name="pause_icon">Pause icon</string>
+    <string name="question">QUESTION</string>
+    <string name="time">TIME</string>
+    <string name="score">SCORE</string>
+    <string name="slash">%s/%s</string>
+    <string name="colon">:%s</string>
+    <string name="game_paused">GAME PAUSED</string>
+    <string name="restart">Restart</string>
+    <string name="exit">Exit</string>
+    <string name="you_got_right">%s YOU GOT RIGHT</string>
+    <string name="of">%s OF %s</string>
+    <string name="replay">REPLAY</string>
+    <string name="open_and_close_parenthesis">%s (%s)</string>
+    <string name="image_of_us_license_plate">Image of US license plate</string>
+    <string name="abbreviation">ABBREVIATIONS</string>
+    <string name="nicknames">NICKNAMES</string>
+    <string name="license_plate">LICENSE PLATES</string>
+</resources>

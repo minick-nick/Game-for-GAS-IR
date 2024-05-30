@@ -1,0 +1,8 @@
+package com.example.gameforgasir
+
+const val MAX_QUESTIONS = 5
+const val SCORE_INCREASE = 100
+const val TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS = 7L
+const val ONE_SECOND_IN_MILLIS = 1000L
+const val NUMBER_OF_CHOICES = 4
+const val CORRECT_ANSWER_VISIBILITY_TIME_DURATION = 1000L
