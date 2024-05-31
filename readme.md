@@ -11,4 +11,4 @@ Disclaimer: I was not paid by GAS to build this project. This is a self-initiate
 💻 Requirements
 ------------
 To try out this application, you need to use [Android Studio](https://developer.android.com/studio).
-You can clone this repository, import the project from Android Studio, or download its APK file [here](https://drive.google.com/file/d/1V2od2P5r6CwxoITo1DeFBq7RThasw629/view?usp=sharing).
+You can clone this repository, import the project from Android Studio, or download its APK file [here](https://drive.google.com/file/d/1_gtJcHZNUhrl1O3X2BURcYkZN3yJA1tS/view?usp=sharing).
