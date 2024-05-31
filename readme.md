@@ -1,5 +1,5 @@
 # Game for GAS IR
-<img src="readme/game_for_gas_ss.gif" alt="Game for GAS IR App" width="200" />
+<img src="readme/game_for_gas_ir_ss.gif" alt="Game for GAS IR App" width="200" />
 
 This app is designed for newly hired Data Entry Specialists, specifically
 Image Reviewers (IR), at Global Agility Solutions (GAS). As a former IR at GAS, I
