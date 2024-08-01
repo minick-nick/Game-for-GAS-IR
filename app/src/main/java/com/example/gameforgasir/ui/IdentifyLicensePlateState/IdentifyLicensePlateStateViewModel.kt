@@ -3,7 +3,7 @@ package com.example.gameforgasir.ui.IdentifyLicensePlateState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gameforgasir.CORRECT_ANSWER_VISIBILITY_TIME_DURATION
-import com.example.gameforgasir.MAX_QUESTIONS
+import com.example.gameforgasir.DEFAULT_NUMBER_OF_QUESTIONS
 import com.example.gameforgasir.NUMBER_OF_CHOICES
 import com.example.gameforgasir.SCORE_INCREASE
 import com.example.gameforgasir.TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
@@ -69,21 +69,20 @@ class IdentifyLicensePlateStateViewModel(
         }
     }
 
-    init { resetGame() }
-    fun resetGame() {
+    fun resetGame(numberOfQuestions: Int = DEFAULT_NUMBER_OF_QUESTIONS) {
         remainingQuestions = usSates
             .shuffled()
-            .subList(0, MAX_QUESTIONS)
+            .subList(0, numberOfQuestions)
             .toMutableList()
 
         val pickedUsState = pickRandomUsState()
 
         _uiState.value = IdentifyLicensePlateStateState(
-            usLicensePlate = pickedUsState.licensePlate,
+            currentLicensePlate = pickedUsState.licensePlate,
             choices = getChoices(),
             gameStatus = GameStatusState(
-                numberOfAnsweredQuestions = getNumberOfAnsweredQuestions(),
-                numberOfQuestions = MAX_QUESTIONS,
+                numberOfAnsweredQuestions = numberOfQuestions - remainingQuestions.size,
+                numberOfQuestions = numberOfQuestions,
                 remainingTime = TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
             )
         )
@@ -94,7 +93,7 @@ class IdentifyLicensePlateStateViewModel(
         setUserAnswerIndex(userAnswer)
         setCorrectAnswerIndex()
 
-        if (getNumberOfAnsweredQuestions() <= MAX_QUESTIONS) {
+        if (getNumberOfAnsweredQuestions() <= uiState.value.gameStatus.numberOfQuestions) {
             if(userAnswer.isTheAnswer) {
                 soundEffectsRepository.playCorrectSoundEffect()
                 increaseScoreAndNumberOfCorrectAnswer()
@@ -134,7 +133,7 @@ class IdentifyLicensePlateStateViewModel(
 
         _uiState.update {
             it.copy(
-                usLicensePlate = pickedUsState.licensePlate,
+                currentLicensePlate = pickedUsState.licensePlate,
                 choices = getChoices(),
                 gameStatus = it.gameStatus.copy(
                     numberOfAnsweredQuestions = getNumberOfAnsweredQuestions()
@@ -228,5 +227,5 @@ class IdentifyLicensePlateStateViewModel(
             }
         }
     }
-    private fun getNumberOfAnsweredQuestions() = MAX_QUESTIONS - remainingQuestions.size
+    private fun getNumberOfAnsweredQuestions() = uiState.value.gameStatus.numberOfQuestions - remainingQuestions.size
 }

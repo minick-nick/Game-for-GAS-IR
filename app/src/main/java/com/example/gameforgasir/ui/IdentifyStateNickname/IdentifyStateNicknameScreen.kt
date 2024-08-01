@@ -16,9 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gameforgasir.LIST_OF_AVAILABLE_NUMBER_OF_QUESTIONS
 import com.example.gameforgasir.R
 import com.example.gameforgasir.ui.AppViewModelProvider
 import com.example.gameforgasir.ui.Choice
+import com.example.gameforgasir.ui.ChooseNumberOfQuestionsDialog
 import com.example.gameforgasir.ui.IdentifyStateNicknameState
 import com.example.gameforgasir.ui.PauseDialog
 import com.example.gameforgasir.ui.TopGameStatusBottomChoices
@@ -40,6 +42,7 @@ fun IdentifyStateNicknameScreen(
     val uiState by viewModel.uiState.collectAsState()
     val windowInfo = LocalWindowInfo.current
     val isPauseDialogVisible = rememberSaveable { mutableStateOf(false) }
+    val isChooseNumberOfQuestionsDialogVisible = rememberSaveable { mutableStateOf(true) }
 
     if (uiState.gameStatus.isGameOver) {
         onNavigateGameFinishedScreen(
@@ -69,14 +72,28 @@ fun IdentifyStateNicknameScreen(
     if (isPauseDialogVisible.value) {
         PauseDialog(
             onRestart = {
-                viewModel.resetGame()
                 isPauseDialogVisible.value = false
+                isChooseNumberOfQuestionsDialogVisible.value = true
                         },
             onExit = {
                 onExit()
                 isPauseDialogVisible.value = false
                      },
             onDismissRequest = { isPauseDialogVisible.value = false },
+        )
+    }
+
+    if (isChooseNumberOfQuestionsDialogVisible.value) {
+        ChooseNumberOfQuestionsDialog(
+            onDismissRequest = {
+                onExit()
+                isChooseNumberOfQuestionsDialogVisible.value = false
+                               },
+            onSelectNumberOfQuestions = {
+                viewModel.resetGame(numberOfQuestions = it)
+                isChooseNumberOfQuestionsDialogVisible.value = false
+            },
+            listOfNumberOfQuestions = LIST_OF_AVAILABLE_NUMBER_OF_QUESTIONS
         )
     }
 }

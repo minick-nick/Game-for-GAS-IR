@@ -1,8 +1,6 @@
 package com.example.gameforgasir.ui.IdentifyAbbreviationOfState
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -15,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,11 +34,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gameforgasir.LIST_OF_AVAILABLE_NUMBER_OF_QUESTIONS
 import com.example.gameforgasir.ui.AppViewModelProvider
+import com.example.gameforgasir.ui.ChooseNumberOfQuestionsDialog
 import com.example.gameforgasir.ui.GameStatus
 import com.example.gameforgasir.ui.IdentifyAbbreviationOfStateState
-import com.example.gameforgasir.ui.navigation.NavigationDestination
 import com.example.gameforgasir.ui.PauseDialog
+import com.example.gameforgasir.ui.navigation.NavigationDestination
 import com.example.gameforgasir.ui.theme.GameForGASIRTheme
 
 object IdentifyAbbreviationOfStatesDestination : NavigationDestination {
@@ -59,8 +58,8 @@ fun IdentifyAbbreviationOfStatesScreen(
     val uiState by viewModel.uiState.collectAsState()
     val windowInfo = LocalWindowInfo.current
     val focusRequesterForTextField = remember { FocusRequester() }
-    val isKeyboardShownBefore = remember { mutableStateOf(false) }
     val isPauseDialogVisible = rememberSaveable { mutableStateOf(false) }
+    val isChooseNumberOfQuestionsDialogVisible = rememberSaveable { mutableStateOf(true) }
 
     if (uiState.gameStatus.isGameOver) {
         onNavigateGameFinishedScreen(
@@ -70,17 +69,8 @@ fun IdentifyAbbreviationOfStatesScreen(
         )
     }
 
-    /**
-     * To request focus for the text field when the IdentifyAbbreviationOfStatesScreen is focused
-     * in order to show the keyboard
-     */
     LaunchedEffect(windowInfo) {
         snapshotFlow { windowInfo.isWindowFocused }.collect { isWindowFocused ->
-            if (isWindowFocused && !isKeyboardShownBefore.value) {
-                focusRequesterForTextField.requestFocus()
-                isKeyboardShownBefore.value = true
-            }
-
             if (isWindowFocused) {
                 viewModel.timer.start()
             } else {
@@ -94,21 +84,36 @@ fun IdentifyAbbreviationOfStatesScreen(
         onUserInputAbbreviationChange = viewModel::updateAbbreviationAnswer,
         focusRequesterForTextField = focusRequesterForTextField,
         onEnterAnswer = viewModel::checkAbbreviationAnswer,
-        onPauseBtn = { isPauseDialogVisible.value = true },
+        onPause = { isPauseDialogVisible.value = true },
         modifier = modifier
     )
 
     if (isPauseDialogVisible.value) {
         PauseDialog(
             onRestart = {
-                viewModel.resetGame()
                 isPauseDialogVisible.value = false
+                isChooseNumberOfQuestionsDialogVisible.value = true
                         },
             onExit = {
                 onExit()
                 isPauseDialogVisible.value = false
             },
             onDismissRequest = { isPauseDialogVisible.value = false }
+        )
+    }
+
+    if (isChooseNumberOfQuestionsDialogVisible.value) {
+        ChooseNumberOfQuestionsDialog(
+            onDismissRequest = {
+                onExit()
+                isChooseNumberOfQuestionsDialogVisible.value = false
+                               },
+            onSelectNumberOfQuestions = {
+                viewModel.resetGame(numberOfQuestions = it)
+                isChooseNumberOfQuestionsDialogVisible.value = false
+                focusRequesterForTextField.requestFocus()
+                                        },
+            listOfNumberOfQuestions = LIST_OF_AVAILABLE_NUMBER_OF_QUESTIONS
         )
     }
 }
@@ -119,7 +124,7 @@ fun IdentifyAbbreviationOfStatesBody(
     onUserInputAbbreviationChange: (String) -> Unit,
     focusRequesterForTextField: FocusRequester? = null,
     onEnterAnswer: () -> Unit,
-    onPauseBtn: () -> Unit,
+    onPause: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -130,7 +135,7 @@ fun IdentifyAbbreviationOfStatesBody(
     ) {
         GameStatus(
             state = state.gameStatus,
-            onPause = onPauseBtn
+            onPause = onPause
         )
         Spacer(modifier = Modifier.weight(1f))
         Column(
@@ -196,7 +201,8 @@ fun IdentifyAbbreviationOfStatesBodyPreview() {
                 userInputAbbreviation = "AL"
             ),
             onUserInputAbbreviationChange = {},
-            onEnterAnswer = { /*TODO*/ },
-            onPauseBtn = { /*TODO*/ })
+            onEnterAnswer = { },
+            onPause = { }
+        )
     }
 }

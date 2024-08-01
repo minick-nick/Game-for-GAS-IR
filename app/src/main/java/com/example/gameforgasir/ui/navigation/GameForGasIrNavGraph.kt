@@ -1,14 +1,11 @@
 package com.example.gameforgasir.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.gameforgasir.R
 import com.example.gameforgasir.data.local.LocalGameForGasIrData
@@ -25,14 +22,11 @@ import com.example.gameforgasir.ui.IdentifyStateNickname.IdentifyStateNicknameDe
 import com.example.gameforgasir.ui.IdentifyStateNickname.IdentifyStateNicknameScreen
 
 
-
 @Composable
 fun GameForGasIrNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
-
     NavHost(
         navController = navController,
         startDestination = HomeDestination.route,
@@ -46,7 +40,9 @@ fun GameForGasIrNavHost(
                 }
             )
         }
-        composable(route = IdentifyAbbreviationOfStatesDestination.route) {
+        composable(
+            route = IdentifyAbbreviationOfStatesDestination.route
+        ) {
             IdentifyAbbreviationOfStatesScreen(
                 onExit = {
                     navController.popBackStack()

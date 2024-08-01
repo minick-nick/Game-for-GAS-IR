@@ -22,7 +22,7 @@ data class IdentifyStateNicknameState(
 )
 
 data class IdentifyLicensePlateStateState(
-    @DrawableRes val usLicensePlate: Int = 0,
+    @DrawableRes val currentLicensePlate: Int? = null,
     val choices: List<Choice> = emptyList(),
     val isCorrectAnswerShown: Boolean = false,
     val correctAnswerIndex: Int? = null,

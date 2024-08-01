@@ -47,7 +47,7 @@ fun HomeScreen(
     ) {
         items(gameTypes) { gameType ->
             GameTypeCard(
-                gameType,
+                gameType = gameType,
                 onClick = { onSelectGame(gameType.destinationScreen) }
             )
         }

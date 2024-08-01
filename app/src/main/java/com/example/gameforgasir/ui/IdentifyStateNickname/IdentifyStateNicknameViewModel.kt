@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.gameforgasir.CORRECT_ANSWER_VISIBILITY_TIME_DURATION
+import com.example.gameforgasir.DEFAULT_NUMBER_OF_QUESTIONS
 import com.example.gameforgasir.GameOfGasIrApplication
-import com.example.gameforgasir.MAX_QUESTIONS
 import com.example.gameforgasir.NUMBER_OF_CHOICES
 import com.example.gameforgasir.SCORE_INCREASE
 import com.example.gameforgasir.TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
@@ -75,12 +75,10 @@ class IdentifyStateNicknameViewModel(
         }
     }
 
-    init { resetGame() }
-
-    fun resetGame() {
+    fun resetGame(numberOfQuestions: Int = DEFAULT_NUMBER_OF_QUESTIONS ) {
         remainingQuestions = usStates
             .shuffled()
-            .subList(0, MAX_QUESTIONS)
+            .subList(0, numberOfQuestions)
             .toMutableList()
 
         val pickedUsState = pickRandomUsState()
@@ -90,8 +88,8 @@ class IdentifyStateNicknameViewModel(
             stateAbbreviation = pickedUsState.abbreviation,
             choices = getChoices(),
             gameStatus = GameStatusState(
-                numberOfAnsweredQuestions = getNumberOfAnsweredQuestions(),
-                numberOfQuestions = MAX_QUESTIONS,
+                numberOfAnsweredQuestions = numberOfQuestions - remainingQuestions.size,
+                numberOfQuestions = numberOfQuestions,
                 remainingTime = TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
             )
         )
@@ -102,7 +100,7 @@ class IdentifyStateNicknameViewModel(
         setUserAnswerIndex(userAnswer)
         setCorrectAnswerIndex()
 
-        if (getNumberOfAnsweredQuestions() <= MAX_QUESTIONS) {
+        if (getNumberOfAnsweredQuestions() <= uiState.value.gameStatus.numberOfQuestions) {
             if(userAnswer.isTheAnswer) {
                 soundEffectsRepository.playCorrectSoundEffect()
                 increaseScoreAndNumberOfCorrectAnswer()
@@ -114,7 +112,6 @@ class IdentifyStateNicknameViewModel(
                 executeAfter(CORRECT_ANSWER_VISIBILITY_TIME_DURATION) {
                     hideCorrectAnswer()
                     nextQuestion()
-                    Log.i("OnFinishTimer reset userAnswerIndex", userAnswerIndex.toString())
                 }
                 timer.restart()
             } else {
@@ -239,7 +236,7 @@ class IdentifyStateNicknameViewModel(
         }
     }
 
-    private fun getNumberOfAnsweredQuestions() = MAX_QUESTIONS - remainingQuestions.size
+    private fun getNumberOfAnsweredQuestions() = uiState.value.gameStatus.numberOfQuestions - remainingQuestions.size
 
     companion object {
         val factory: ViewModelProvider.Factory = viewModelFactory {

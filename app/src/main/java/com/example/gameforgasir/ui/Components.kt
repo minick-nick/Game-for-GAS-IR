@@ -1,12 +1,7 @@
 package com.example.gameforgasir.ui
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.BorderStroke
@@ -32,14 +27,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,13 +40,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.gameforgasir.R
 import com.example.gameforgasir.ui.theme.GameForGASIRTheme
-import kotlinx.coroutines.delay
 
 enum class ChoiceBtnBackgroundColor {
     Default,
@@ -261,6 +253,46 @@ fun PauseDialog(
 }
 
 @Composable
+fun ChooseNumberOfQuestionsDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+    onSelectNumberOfQuestions: (Int) -> Unit,
+    listOfNumberOfQuestions: List<Int>
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest
+    ) {
+        Card(
+            modifier = modifier
+        ) {
+            Column(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_large)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_large))
+            ) {
+                Text(
+                    text = stringResource(R.string.choose_your_desire_number_of_questions),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Column {
+                    listOfNumberOfQuestions.forEach {
+                        Button(onClick = { onSelectNumberOfQuestions(it) }) {
+                            Text(
+                                text = it.toString(),
+                                style = MaterialTheme.typography.labelLarge,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
 fun Choices(
     choices: List<Choice>,
     onSelect: (Choice) -> Unit,
@@ -464,5 +496,19 @@ fun PauseDialogPreview() {
             onRestart = {},
             onExit = {}
         )
+    }
+}
+
+@Preview
+@Composable
+fun ChooseNumberOfQuestionsPreview() {
+    GameForGASIRTheme {
+        Surface {
+            ChooseNumberOfQuestionsDialog(
+                onSelectNumberOfQuestions = {},
+                onDismissRequest = {},
+                listOfNumberOfQuestions = listOf(10, 20, 30, 40, 50)
+            )
+        }
     }
 }

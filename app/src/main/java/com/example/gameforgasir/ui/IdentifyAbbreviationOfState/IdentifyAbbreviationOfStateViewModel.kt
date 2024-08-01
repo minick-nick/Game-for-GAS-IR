@@ -3,9 +3,9 @@ package com.example.gameforgasir.ui.IdentifyAbbreviationOfState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gameforgasir.CORRECT_ANSWER_VISIBILITY_TIME_DURATION
-import com.example.gameforgasir.TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
-import com.example.gameforgasir.MAX_QUESTIONS
+import com.example.gameforgasir.DEFAULT_NUMBER_OF_QUESTIONS
 import com.example.gameforgasir.SCORE_INCREASE
+import com.example.gameforgasir.TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
 import com.example.gameforgasir.data.SoundEffectsRepository
 import com.example.gameforgasir.data.Timer
 import com.example.gameforgasir.data.local.UsState
@@ -70,19 +70,17 @@ class IdentifyAbbreviationOfStateViewModel(
         }
     }
 
-    init { resetGame() }
-
-    fun resetGame() {
+    fun resetGame(numberOfQuestions: Int = DEFAULT_NUMBER_OF_QUESTIONS) {
         remainingQuestions = usStates
             .shuffled()
-            .subList(0, MAX_QUESTIONS)
+            .subList(0, numberOfQuestions)
             .toMutableList()
 
         _uiState.value = IdentifyAbbreviationOfStateState(
             stateName = pickRandomUsState().name,
             gameStatus = GameStatusState(
-                numberOfAnsweredQuestions = getNumberOfAnsweredQuestions(),
-                numberOfQuestions = MAX_QUESTIONS,
+                numberOfAnsweredQuestions = numberOfQuestions - remainingQuestions.size,
+                numberOfQuestions = numberOfQuestions,
                 remainingTime = TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
             )
         )
@@ -100,7 +98,7 @@ class IdentifyAbbreviationOfStateViewModel(
     }
 
     fun checkAbbreviationAnswer() {
-        if (getNumberOfAnsweredQuestions() <= MAX_QUESTIONS) {
+        if (getNumberOfAnsweredQuestions() <= uiState.value.gameStatus.numberOfQuestions) {
             if (isAnswerCorrect()) {
                 soundEffectsRepository.playCorrectSoundEffect()
                 setIsAnswerCorrectValue(true)
@@ -220,5 +218,5 @@ class IdentifyAbbreviationOfStateViewModel(
         }
     }
 
-    private fun getNumberOfAnsweredQuestions() = MAX_QUESTIONS - remainingQuestions.size
+    private fun getNumberOfAnsweredQuestions() = uiState.value.gameStatus.numberOfQuestions - remainingQuestions.size
 }
