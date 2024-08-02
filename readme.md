@@ -7,9 +7,9 @@ the abbreviations, nicknames, and license plates of specific US states.
 Disclaimer: I was not paid by GAS to build this project. This is a self-initiated project.
 
 ## 🖼️ Preview
-Home | Identify Abbreviation of State | Identify State Nickname | Identify License Plate State
----- | ------------------------------ | ----------------------- | ----------------------------
-<img src="screenshots/home.gif" width="184" /> | <img src="screenshots/identify-abbreviation-of-state.gif" width="184" /> | <img src="screenshots/identify-state-nickname.gif" width="184" /> | <img src="screenshots/identify-license-plate-state.gif" width="184" />
+Home | Identify Abbreviation of State                                           | Identify State Nickname                                           | Identify License Plate State
+---- |--------------------------------------------------------------------------|-------------------------------------------------------------------| ----------------------------
+<img src="screenshots/home.gif" width="180" /> | <img src="screenshots/identify-abbreviation-of-state.gif" width="180" /> | <img src="screenshots/identify-state-nickname.gif" width="180" /> | <img src="screenshots/identify-license-plate-state.gif" width="180" />
 
 ## ✨ Features
 - Three Types of Questions: Users can choose from three different question types and start playing.
