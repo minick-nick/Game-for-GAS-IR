@@ -9,7 +9,7 @@ Disclaimer: I was not paid by GAS to build this project. This is a self-initiate
 ## 🖼️ Preview
 Home | Identify Abbreviation of State | Identify State Nickname | Identify License Plate State
 ---- | ------------------------------ | ----------------------- | ----------------------------
-![](https://github.com/minick-nick/Game-for-GAS-IR/blob/main/screenshots/home.gif?raw=true) | ![](https://github.com/minick-nick/Game-for-GAS-IR/blob/main/screenshots/identify-abbreviation-of-state.gif?raw=true) | ![](https://github.com/minick-nick/Game-for-GAS-IR/blob/main/screenshots/identify-state-nickname.gif?raw=true) | ![](https://github.com/minick-nick/Game-for-GAS-IR/blob/main/screenshots/identify-license-plate-state.gif?raw=true)
+<img src="screenshots/home.gif" width="184" /> | <img src="screenshots/identify-abbreviation-of-state.gif" width="184" /> | <img src="screenshots/identify-state-nickname.gif" width="184" /> | <img src="screenshots/identify-license-plate-state.gif" width="184" />
 
 ## ✨ Features
 - Three Types of Questions: Users can choose from three different question types and start playing.
