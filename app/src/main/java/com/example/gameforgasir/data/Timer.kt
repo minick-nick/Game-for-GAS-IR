@@ -1,8 +1,7 @@
 package com.example.gameforgasir.data
 
-import android.util.Log
-import com.example.gameforgasir.TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
 import com.example.gameforgasir.ONE_SECOND_IN_MILLIS
+import com.example.gameforgasir.TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
