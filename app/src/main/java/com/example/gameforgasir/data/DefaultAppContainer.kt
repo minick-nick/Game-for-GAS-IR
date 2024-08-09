@@ -8,6 +8,6 @@ interface AppContainer {
 
 class DefaultAppContainer(private val context: Context): AppContainer {
     override val soundEffectsRepository: SoundEffectsRepository by lazy {
-        SoundEffectsRepository(context)
+        DefaultSoundEffectsRepository(context)
     }
 }

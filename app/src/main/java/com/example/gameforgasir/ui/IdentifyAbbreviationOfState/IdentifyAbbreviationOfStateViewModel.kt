@@ -70,7 +70,7 @@ class IdentifyAbbreviationOfStateViewModel(
         }
     }
 
-    fun resetGame(numberOfQuestions: Int = DEFAULT_NUMBER_OF_QUESTIONS) {
+    fun startGame(numberOfQuestions: Int = DEFAULT_NUMBER_OF_QUESTIONS) {
         remainingQuestions = usStates
             .shuffled()
             .subList(0, numberOfQuestions)
@@ -79,7 +79,7 @@ class IdentifyAbbreviationOfStateViewModel(
         _uiState.value = IdentifyAbbreviationOfStateState(
             stateName = pickRandomUsState().name,
             gameStatus = GameStatusState(
-                numberOfAnsweredQuestions = numberOfQuestions - remainingQuestions.size,
+                currentQuestionNumber = numberOfQuestions - remainingQuestions.size,
                 numberOfQuestions = numberOfQuestions,
                 remainingTime = TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
             )
@@ -141,7 +141,7 @@ class IdentifyAbbreviationOfStateViewModel(
             it.copy(
                 stateName = pickRandomUsState().name,
                 gameStatus = it.gameStatus.copy(
-                    numberOfAnsweredQuestions = getNumberOfAnsweredQuestions()
+                    currentQuestionNumber = getNumberOfAnsweredQuestions()
                 )
             )
         }

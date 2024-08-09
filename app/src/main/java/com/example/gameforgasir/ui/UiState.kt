@@ -38,7 +38,7 @@ data class GameFinishedState(
 )
 
 data class GameStatusState(
-    val numberOfAnsweredQuestions: Int = 0,
+    val currentQuestionNumber: Int = 0,
     val numberOfCorrectAnswers: Int = 0,
     val numberOfQuestions: Int = 0,
     val remainingTime: Long = 0,

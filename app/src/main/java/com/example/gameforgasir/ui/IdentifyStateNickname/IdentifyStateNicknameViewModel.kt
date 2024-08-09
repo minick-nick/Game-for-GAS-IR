@@ -88,7 +88,7 @@ class IdentifyStateNicknameViewModel(
             stateAbbreviation = pickedUsState.abbreviation,
             choices = getChoices(),
             gameStatus = GameStatusState(
-                numberOfAnsweredQuestions = numberOfQuestions - remainingQuestions.size,
+                currentQuestionNumber = numberOfQuestions - remainingQuestions.size,
                 numberOfQuestions = numberOfQuestions,
                 remainingTime = TIME_DURATION_FOR_EACH_QUESTION_IN_SECONDS
             )
@@ -144,7 +144,7 @@ class IdentifyStateNicknameViewModel(
                 stateAbbreviation = pickedUsState.abbreviation,
                 choices = getChoices(),
                 gameStatus = it.gameStatus.copy(
-                    numberOfAnsweredQuestions = getNumberOfAnsweredQuestions()
+                    currentQuestionNumber = getNumberOfAnsweredQuestions()
                 )
             )
         }

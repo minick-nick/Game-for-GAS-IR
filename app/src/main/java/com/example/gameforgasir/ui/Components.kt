@@ -31,8 +31,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -76,7 +74,7 @@ fun TopGameStatusBottomChoices(
         ) {
             GameStatus(
                 state = GameStatusState(
-                    numberOfAnsweredQuestions = numberOfAnsweredQuestion,
+                    currentQuestionNumber = numberOfAnsweredQuestion,
                     numberOfQuestions = numberOfQuestions,
                     remainingTime = remainingTime,
                     currentScore = currentScore,
@@ -161,7 +159,7 @@ fun GameStatus(
                     label = stringResource(R.string.question),
                     data = stringResource(
                         R.string.slash,
-                        state.numberOfAnsweredQuestions.toString(),
+                        state.currentQuestionNumber.toString(),
                         state.numberOfQuestions.toString()
                     ),
                     modifier = Modifier.weight(1f)
@@ -477,7 +475,7 @@ fun GameStatusPreview() {
     GameForGASIRTheme {
         GameStatus(
             state = GameStatusState(
-                numberOfAnsweredQuestions = 10,
+                currentQuestionNumber = 10,
                 numberOfQuestions = 50,
                 remainingTime = 10,
                 currentScore = 100

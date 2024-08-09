@@ -106,7 +106,7 @@ fun IdentifyStateNicknameBody(
     modifier: Modifier = Modifier
 ) {
     TopGameStatusBottomChoices(
-        numberOfAnsweredQuestion = state.gameStatus.numberOfAnsweredQuestions,
+        numberOfAnsweredQuestion = state.gameStatus.currentQuestionNumber,
         numberOfQuestions = state.gameStatus.numberOfQuestions,
         remainingTime = state.gameStatus.remainingTime,
         currentScore = state.gameStatus.currentScore,
