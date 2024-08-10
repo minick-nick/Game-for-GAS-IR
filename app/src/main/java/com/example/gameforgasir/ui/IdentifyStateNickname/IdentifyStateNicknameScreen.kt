@@ -90,7 +90,7 @@ fun IdentifyStateNicknameScreen(
                 isChooseNumberOfQuestionsDialogVisible.value = false
                                },
             onSelectNumberOfQuestions = {
-                viewModel.resetGame(numberOfQuestions = it)
+                viewModel.startGame(numberOfQuestions = it)
                 isChooseNumberOfQuestionsDialogVisible.value = false
             },
             listOfNumberOfQuestions = LIST_OF_AVAILABLE_NUMBER_OF_QUESTIONS

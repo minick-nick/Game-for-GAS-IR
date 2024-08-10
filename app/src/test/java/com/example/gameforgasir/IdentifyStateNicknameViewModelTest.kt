@@ -2,7 +2,7 @@ package com.example.gameforgasir
 
 import com.example.gameforgasir.data.local.UsState
 import com.example.gameforgasir.rules.TestDispatcherRule
-import com.example.gameforgasir.ui.IdentifyAbbreviationOfState.IdentifyAbbreviationOfStateViewModel
+import com.example.gameforgasir.ui.IdentifyStateNickname.IdentifyStateNicknameViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -12,16 +12,16 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
-class IdentifyAbbreviationOfStateViewModelTest {
+class IdentifyStateNicknameViewModelTest {
     @get: Rule
     val testDispatcherRule = TestDispatcherRule()
 
     // Boundary case
     @Test
-    fun identifyAbbreviationOfStateViewModel_Initialization_FirstQuestionLoaded() = runTest {
+    fun identifyStateNicknameViewModel_Initialization_FirstQuestionLoaded() {
         val selectedNumberOfQuestions = 10
 
-        val viewModel = IdentifyAbbreviationOfStateViewModel(
+        val viewModel = IdentifyStateNicknameViewModel(
             usStates = TestData.usStates,
             soundEffectsRepository = SoundEffectRepositoryTest()
         ).apply { startGame(selectedNumberOfQuestions) }
@@ -36,16 +36,16 @@ class IdentifyAbbreviationOfStateViewModelTest {
     }
 
     @Test
-    fun identifyAbbreviationOfStateViewModel_AllAbbreviationsCorrect_UiStateUpdatedCorrectly() = runTest {
+    fun identifyStateNicknameViewModel_AllNicknamesCorrect_UiStateUpdatedCorrectly() = runTest {
         val selectedNumberOfQuestions = 10
 
-        val viewModel = IdentifyAbbreviationOfStateViewModel(
+        val viewModel = IdentifyStateNicknameViewModel(
             usStates = TestData.usStates,
             soundEffectsRepository = SoundEffectRepositoryTest()
         ).apply { startGame(selectedNumberOfQuestions) }
 
         var currentUiState = viewModel.uiState.value
-        var correctAbbreviation = TestData.getAbbreviation(currentUiState.stateName)
+        var indexOfCorrectNickname: Int = TestData.getCorrectAnswerIndex(currentUiState.choices)
 
         var expectedScore = 0
         var expectedQuestionNumber = 0
@@ -56,47 +56,44 @@ class IdentifyAbbreviationOfStateViewModelTest {
             assertEquals(expectedScore, currentUiState.gameStatus.currentScore)
             assertEquals(expectedQuestionNumber, currentUiState.gameStatus.currentQuestionNumber)
 
-            viewModel.updateAbbreviationAnswer(correctAbbreviation)
-            viewModel.checkAbbreviationAnswer()
+            viewModel.checkNicknameAnswer(currentUiState.choices[indexOfCorrectNickname])
 
             expectedScore += 100
 
             delay(1000)
             currentUiState = viewModel.uiState.value
-            correctAbbreviation = TestData.getAbbreviation(currentUiState.stateName)
+            indexOfCorrectNickname = TestData.getCorrectAnswerIndex(currentUiState.choices)
         }
 
         assertEquals(expectedScore, currentUiState.gameStatus.currentScore)
         assertTrue(currentUiState.gameStatus.isGameOver)
     }
-    
+
     // Success path
     @Test
-    fun identifyAbbreviationOfStateViewModel_CorrectStateAbbreviation_ScoreUpdatedAndErrorFlagUnset() = runTest {
+    fun identifyStateNicknameViewModel_CorrectStateNickname_ScoreUpdatedAndAnswerIndexEqualsToCorrectAnswerIndex() = runTest {
         val selectedNumberOfQuestions = 10
 
-        val viewModel = IdentifyAbbreviationOfStateViewModel(
+        val viewModel = IdentifyStateNicknameViewModel(
             usStates = TestData.usStates,
             soundEffectsRepository = SoundEffectRepositoryTest()
         ).apply { startGame(selectedNumberOfQuestions) }
 
         var currentUiState = viewModel.uiState.value
-        val currentUsState = currentUiState.stateName
-        val correctAbbreviation = TestData.getAbbreviation(currentUsState)
+        val indexOfCorrectNickname = TestData.getCorrectAnswerIndex(currentUiState.choices)
 
-        viewModel.updateAbbreviationAnswer(correctAbbreviation)
-        viewModel.checkAbbreviationAnswer()
+        viewModel.checkNicknameAnswer(currentUiState.choices[indexOfCorrectNickname])
 
         currentUiState = viewModel.uiState.value
 
-        assertTrue(currentUiState.isAnswerCorrect)
+        assertEquals(indexOfCorrectNickname, currentUiState.correctAnswerIndex)
         assertEquals(100, currentUiState.gameStatus.currentScore)
     }
 
     @Test
-    fun identifyAbbreviationOfStateViewModel_SelectNumberOfQuestions_NumberOfQuestionsUpdatedCorrectly() = runTest {
+    fun identifyStateNicknameViewModel_SelectNumberOfQuestions_NumberOfQuestionsUpdatedCorrectly() = runTest {
         val availableNumberOfQuestions = listOf(10, 20, 30, 40, 50)
-        val viewModel = IdentifyAbbreviationOfStateViewModel(
+        val viewModel = IdentifyStateNicknameViewModel(
             usStates = List(50) { UsState() },
             soundEffectsRepository = SoundEffectRepositoryTest()
         )
@@ -109,27 +106,27 @@ class IdentifyAbbreviationOfStateViewModelTest {
     }
 
     @Test
-    fun identifyAbbreviationOfStateViewModel_RestartGame_UiStateResetSuccessfully() = runTest {
+    fun identifyStateNicknameViewModel_RestartGame_UiStateResetSuccessfully() = runTest {
         var selectedNumberOfQuestions = 20
 
-        val viewModel = IdentifyAbbreviationOfStateViewModel(
+        val viewModel = IdentifyStateNicknameViewModel(
             usStates = TestData.usStates,
             soundEffectsRepository = SoundEffectRepositoryTest()
         ).apply { startGame(selectedNumberOfQuestions) }
+
         var currentUiState = viewModel.uiState.value
+        var indexOfCorrectNickname = TestData.getCorrectAnswerIndex(currentUiState.choices)
 
         repeat(10) {
-            viewModel.updateAbbreviationAnswer(
-                TestData.getAbbreviation(currentUiState.stateName)
-            )
-            viewModel.checkAbbreviationAnswer()
+            viewModel.checkNicknameAnswer(currentUiState.choices[indexOfCorrectNickname])
             delay(1000)
+            currentUiState = viewModel.uiState.value
+            indexOfCorrectNickname = TestData.getCorrectAnswerIndex(currentUiState.choices)
         }
 
         selectedNumberOfQuestions = 10
         viewModel.startGame(selectedNumberOfQuestions)
         currentUiState = viewModel.uiState.value
-
 
         assertEquals(selectedNumberOfQuestions, currentUiState.gameStatus.numberOfQuestions)
         assertEquals(0, currentUiState.gameStatus.currentScore)
@@ -138,19 +135,22 @@ class IdentifyAbbreviationOfStateViewModelTest {
 
     // Error path
     @Test
-    fun identifyAbbreviationOfStateViewModel_IncorrectAbbreviation_ErrorFlagSet() = runTest {
+    fun identifyStateNicknameViewModel_IncorrectNickname_AnswerIndexNotEqualsToCorrectAnswerIndex() = runTest {
         val selectedNumberOfQuestions = 10
-        val incorrectAbbreviation = "XXX"
 
-        val viewModel = IdentifyAbbreviationOfStateViewModel(
+        val viewModel = IdentifyStateNicknameViewModel(
             usStates = TestData.usStates,
             soundEffectsRepository = SoundEffectRepositoryTest()
         ).apply { startGame(selectedNumberOfQuestions) }
 
-        viewModel.updateAbbreviationAnswer(incorrectAbbreviation)
-        viewModel.checkAbbreviationAnswer()
+        var currentUiState = viewModel.uiState.value
+        val incorrectAnswerIndex = TestData.getIncorrectAnswerIndex(currentUiState.choices)
 
-        assertFalse(viewModel.uiState.value.isAnswerCorrect)
+        viewModel.checkNicknameAnswer(currentUiState.choices[incorrectAnswerIndex])
+
+        currentUiState = viewModel.uiState.value
+
+        assertNotEquals(incorrectAnswerIndex, currentUiState.correctAnswerIndex)
         assertEquals(0, viewModel.uiState.value.gameStatus.currentScore)
     }
 }

@@ -1,6 +1,5 @@
 package com.example.gameforgasir.ui.IdentifyStateNickname
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -49,7 +48,6 @@ class IdentifyStateNicknameViewModel(
         override fun onFinish() {
             soundEffectsRepository.playTimesUpSoundEffect()
             if (remainingQuestions.isNotEmpty()) {
-                Log.i("OnFinishTimer", userAnswerIndex.toString())
                 setCorrectAnswerIndex()
                 showCorrectAnswer()
                 executeAfter(CORRECT_ANSWER_VISIBILITY_TIME_DURATION) {
@@ -75,7 +73,7 @@ class IdentifyStateNicknameViewModel(
         }
     }
 
-    fun resetGame(numberOfQuestions: Int = DEFAULT_NUMBER_OF_QUESTIONS ) {
+    fun startGame(numberOfQuestions: Int = DEFAULT_NUMBER_OF_QUESTIONS ) {
         remainingQuestions = usStates
             .shuffled()
             .subList(0, numberOfQuestions)

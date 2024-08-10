@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class IdentifyLicensePlateStateViewModel(
-    private val usSates: List<UsState>,
+    private val usStates: List<UsState>,
     private val soundEffectsRepository: SoundEffectsRepository
 ): ViewModel() {
 
@@ -69,8 +69,8 @@ class IdentifyLicensePlateStateViewModel(
         }
     }
 
-    fun resetGame(numberOfQuestions: Int = DEFAULT_NUMBER_OF_QUESTIONS) {
-        remainingQuestions = usSates
+    fun startGame(numberOfQuestions: Int = DEFAULT_NUMBER_OF_QUESTIONS) {
+        remainingQuestions = usStates
             .shuffled()
             .subList(0, numberOfQuestions)
             .toMutableList()
@@ -155,7 +155,7 @@ class IdentifyLicensePlateStateViewModel(
 
     private fun getChoices(): List<Choice> {
         val stateAnswer = currentQuestion.name
-        val usStates = usSates
+        val usStates = usStates
             .map { it.name }
             .toMutableList()
             .also { it.remove(stateAnswer) }

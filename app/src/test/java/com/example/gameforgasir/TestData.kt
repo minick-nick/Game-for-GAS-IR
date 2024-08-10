@@ -1,6 +1,7 @@
 package com.example.gameforgasir
 
 import com.example.gameforgasir.data.local.UsState
+import com.example.gameforgasir.ui.Choice
 
 object TestData {
     val usStates = listOf(
@@ -129,4 +130,19 @@ object TestData {
     private val stateAbbreviationMap: Map<String, String> = usStates.associateBy({ it.name }, { it.abbreviation })
 
     fun getAbbreviation(state: String) = stateAbbreviationMap[state] ?: ""
+
+    fun getCorrectAnswerIndex(choices: List<Choice>): Int {
+        choices.forEachIndexed { index, it ->
+            if (it.isTheAnswer) return index
+        }
+        return -1
+    }
+
+    fun getIncorrectAnswerIndex(choices: List<Choice>): Int {
+        choices.forEachIndexed { index, it ->
+            if (!it.isTheAnswer) return index
+        }
+
+        return -1
+    }
 }
